@@ -5,6 +5,12 @@ const app = express();
 const mongoose = require('mongoose')
 //config the use of .env files
 require('dotenv').config();
+//set up views folder
+app.set('views', './views')
+app.set('view engine', 'ejs')
+//set up access to static files 
+const path = require('path');
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 //Port specified at port 8080
 const PORT = process.env.PORT || 8080
@@ -35,16 +41,18 @@ const Note = mongoose.model('note', NoteSchema)
 
 app.get('/', (req, res) => {
     try {
-        res.status(200).send(`Welcome to the community NOTEPAD! :)`)
+        res.status(200).render('index', {title: 'NotePad Application'})
     } catch (err) {
         console.log(err);
     }
 })
 
+
+
 //set up express server
 app.listen(PORT, () => {
     try {
-        console.log(`Server started at PORT: ${PORT}`)
+        console.log(`Server started at PORT: ${PORT} | http://localhost:8080`)
     } catch (err) {
         console.log(`Error occurred: ${err}`)
     }
